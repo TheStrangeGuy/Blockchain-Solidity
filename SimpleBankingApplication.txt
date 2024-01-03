@@ -1,0 +1,21 @@
+pragma solidity >=0.8.2 <0.9.0;
+
+contract bank{
+    int bal;
+    constructor()
+    {
+        bal=500;
+    }
+    function debit(int amount) public
+    {
+        bal = bal - amount;
+    }
+    function credit(int amount) public
+    {
+        bal = bal + amount;
+    }
+    function chkbal() view public returns (int)
+    {
+        return bal;
+    }
+}

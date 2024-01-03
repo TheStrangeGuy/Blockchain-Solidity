@@ -1,0 +1,27 @@
+pragma solidity ^0.8.0;
+
+contract SubscriptionService {
+    address public provider;
+    mapping(address => bool) public subscribers;
+
+    event SubscriptionRenewed(address subscriber);
+
+    modifier onlyProvider() {
+        require(msg.sender == provider, "Only the provider can perform this action");
+        _;
+    }
+
+    constructor() {
+        provider = msg.sender;
+    }
+
+    function subscribe() public payable {
+        require(msg.value > 0, "Subscription fee must be greater than 0");
+        subscribers[msg.sender] = true;
+        emit SubscriptionRenewed(msg.sender);
+    }
+
+    function withdrawFunds() public onlyProvider {
+        payable(provider).transfer(address(this).balance);
+    }
+}

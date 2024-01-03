@@ -1,0 +1,24 @@
+pragma solidity ^0.8.0;
+
+contract gameZ {
+    mapping(address => uint256) public playerXP;
+    mapping(address => uint256) public playerTokens;
+
+    event XPConverted(address player, uint256 xp, uint256 tokens);
+
+    constructor() {}
+
+    function earnXP(uint256 xp) external {
+        playerXP[msg.sender] += xp;
+    }
+
+    function convertXPToTokens() external {
+        uint256 xp = playerXP[msg.sender];
+        uint256 tokens = 2**xp;
+
+        playerXP[msg.sender] = 0;
+        playerTokens[msg.sender] += tokens;
+        
+        emit XPConverted(msg.sender, xp, tokens);
+    }
+}

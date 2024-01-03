@@ -1,0 +1,9 @@
+pragma solidity ^0.8.0;
+
+contract RandomNumberGenerator {
+    uint256 public randomNumber;
+
+    function generateRandomNumber() public {
+        randomNumber = uint256(blockhash(block.number - 1)) % 100;
+    }
+}

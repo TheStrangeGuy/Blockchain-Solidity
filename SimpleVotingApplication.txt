@@ -1,0 +1,35 @@
+pragma solidity ^0.8.0;
+
+contract Voting {
+    mapping(address => bool) public hasVoted;
+    mapping(string => uint256) public votes;
+    string[] public candidates;
+
+    function vote(string memory candidate) public {
+        require(!hasVoted[msg.sender], "Already voted");
+        votes[candidate]++;
+        hasVoted[msg.sender] = true;
+
+        if (!isCandidate(candidate)) {
+            candidates.push(candidate);
+        }
+    }
+
+    function getTotalVotesForCandidate(string memory candidate) public view returns (uint256) {
+        require(isCandidate(candidate), "Candidate not found");
+        return votes[candidate];
+    }
+
+    function getCandidates() public view returns (string[] memory) {
+        return candidates;
+    }
+
+    function isCandidate(string memory candidate) internal view returns (bool) {
+        for (uint256 i = 0; i < candidates.length; i++) {
+            if (keccak256(bytes(candidates[i])) == keccak256(bytes(candidate))) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
